@@ -1,0 +1,114 @@
+第一天下午
+----------------------------------model的使用---------orm对象关系映射 object relation map
+操作数据库
+tp中还多了验证的功能
+
+
+写一个注册的功能-------------------user表-----------------15分钟
+
+命名空间  Home/Model
+导入空间  Think/model;
+ 
+类名：驼峰命名法  首字母大写+Model
+继承 ：extends Model
+
+----------------------------------model如何实例化呢?
+直接new
+其他方法？  单字母函数D,M（M,D是不同的）
+D函数
+	没有传入参数的话，返回new Think\Model()
+	传入参数时，优先使用当前模块的Model层的userModel
+	否则使用公共模块Common/Model/userModel
+	最后再使用Think\Model
+	使用静态数组$_model实现单例模式
+M函数
+	无论传入什么参数，都使用Think\Model,
+	且能够传入数据库连接参数，比配置文件中的连接参数，优先级高
+	也使用静态数组$_model实现单例模式
+
+
+链式操作--------------------------30分钟
+	增加一个用户，练练model
+add增加一个用户(add方法源代码分析)
+	add($data)
+	数组的键与列与数据表的键，列保持一致
+	ActiveRecord方法（实现原理是__set()魔术方法，对一个没有的属性赋值)
+	属性和属性值的对应
+
+	模型类的$data属性很关键，存放即将存入数据库的字段及字段值。
+
+	引出，数据字段的自动过滤机制_facade()方法（反问同学们)
+
+	反问同学：ActiveRecord和数组的差别在哪里？，引出源码分析，告诉$data属性是关键
+
+
+--------------------------------------save方法   （20分钟)
+两种方式
+	数组
+	数据对象ORM
+	注意：当数据对象没有主键时，什么也不更新
+和where,order,limit的关系
+殊途同归（options数组包括where,order,limit等,传递查询的参数)
+而用where,order，limit也能传递查询的参数
+
+
+----------------select查方法和连贯操作----------
+源码分析
+find  
+	//总是查找一条记录
+        $options['limit']   =   1;
+
+如果传入一个字符串或者数字，则根据主键查询
+
+-----------------------------options---
+如何连贯操作order ,where,limit等
+最终在执行select,insert,update之前，都保存到option数组中
+
+连贯操作都了什么？
+	调用魔术方法__call()分别把查询参数order,field,limit存到options属性里
+当执行select,update，insert时，调用_parseOptions()分析sql查询条件
+ array_merge($this->options,$options);
+ array_merge函数的优先级，$options优先，覆盖前面的同键值。
+ 所以前面连贯操作后，最后的select()又传了$options，则最后的优先级高
+
+ ---------------------------------------------找出一条记录 find()方法
+
+ 如果有某些表名字未知，只是使用连贯操作，
+ 那么可以使用D()，建立空模型，然后table()的方法执行
+
+
+
+
+第二天下午
+ ----------------------自动验证-------------
+ 根据某个规则，进行字段的验证
+
+ sql语句有两个重要的：数据部分，条件部分
+ 数据部分：this->data
+ 条件部分：options['where']
+
+
+1 create()方法中有验证和过滤
+来个注册表单
+
+2 array(     
+	array(验证字段1,验证规则,错误提示,[验证条件,附加规则,验证时机]),
+	array(验证字段2,验证规则,错误提示,[验证条件,附加规则,验证时机]),
+......);
+
+验证开始：
+create()方法里的 autoValidate()
+静态方式，所谓静态方式，就是模型类里写上$_validate即可，只能用D函数
+
+
+规则名称与规则对应
+附加规则              验证规则
+regex		      '/abc/'
+in		      array(1,2,3)
+between	              '18,20,34'/array(18,20,34)
+confirm               repass
+function               checkPwd(函数名)
+callback	       当前模型类的方法
+equal			某个值
+notequal		某个值
+length			2,10(表示2到10位)

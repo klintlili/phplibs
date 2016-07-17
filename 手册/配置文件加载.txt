@@ -1,0 +1,46 @@
+以下文件的加载，发生在Think.class.php
+
+================================以下数据非调试模型下会编译common~runtime.php
+文件加载顺序
+
+模式文件
+tfull/ThinkPHP/Mode/common.php  模式文件  先加载函数和核心类文件
+
+核心惯例配置文件
+tfull/ThinkPHP/Conf/convention.php
+
+应用配置文件
+tfull/App/Common/Conf/config.php
+
+读取当前应用模式对应的配置文件,common模式下没有对应配置文件
+tfull/App/Common/Conf/config_xxx.php
+
+模式文件里的别名addMap
+应用里的别名addMap
+
+模式文件里的行为定义，也就是系统的行为定义。Hook::import
+应用配置文件里的行为定义tfull/App/Common/Conf/tags.php
+
+语言包
+tfull/ThinkPHP/Lang/zh-cn.php
+================================以上数据非调试模型下会编译common~runtime.php
+调试模式下
+	加载系统调试文件
+	tfull/ThinkPHP/Conf/debug.php
+	应用调试文件
+	tfull/App/Common/Conf/debug.php
+
+当前应用状态对应的配置文件,默认APP_STATUS是''
+	tfull/App/Common/Conf/xxx.php
+
+设置系统时区
+      date_default_timezone_set(C('DEFAULT_TIMEZONE'));
+
+创建应用目录
+应用下Home目录或者runtime的logs目录有问题，build检测目录结构并创建
+
+记录加载文件时间点
+      G('loadTime');
+
+运行应用，转移到ThinkPHP/Library/Think/App.class.php
+     App::run();

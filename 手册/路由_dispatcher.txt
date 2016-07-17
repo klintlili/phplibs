@@ -1,0 +1,7 @@
+由APP::init()调用   Dispatcher::dispatch()进而进入Dispatcher.class.php中
+
+确定模块Home
+	pathinfo和$_GET两种
+	有几个常量  MODULE_NAME,CONTROLLER_NAME,ACTION_NAME
+
+	加载模块下的配置文件  Home/Conf/config.php

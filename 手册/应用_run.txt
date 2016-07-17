@@ -1,0 +1,28 @@
+App::run()
+以下的执行，发生在ThinkPHP/Library/Think/App.class.php
+run方法里，执行了init和exec两个方法，当然这两个方法前后还有对应的钩子方法
+
+1首先应用初始化
+App::init()
+	加载动态配置文件
+	定义几个系统常量
+
+	URL调度，重点
+        Dispatcher::dispatch()
+		确定应用下调用的模块Home
+		确定模块下的控制器Index
+		确定控制器下的操作index
+
+		还设置了几个有关地址和名称的常量，用于后续使用，非常方便
+		比如__ACTION__=tfull/index.php/Home/Index/index
+		    PHP_FILE=/tfull/index.php
+
+
+App::exec()
+	执行对应控制器的对应操作
+	IndexController实例化，用controller函数
+	index操作，用self::invokeAction()
+结束
+在php中，变量名，函数名，类名，方法名都是可以用变量的
+所以，使用call_user_func和$obj->$fun()都是可以的
+
