@@ -273,3 +273,16 @@ function customMerge($A,$B)
     return array_replace_recursive($B,$A);
     
 }
+
+
+//计算本周开始（周一）的日期和本周结束（周日）的日期
+//可以用于统计本周的一些业务
+function getMonAndSun()
+{
+	//date函数的w参数返回0-6，其中0表示周日。1-6表示周一和周日
+	$today=date('w');
+	$offset= $today?(1-$today):(-6);
+	$MonDay=date('Y-m-d',strtotime("$offset day"));
+	$SunDay=date('Y-m-d',strtotime("$MonDay +6 day"));
+	return [$MonDay,$SunDay];
+}
