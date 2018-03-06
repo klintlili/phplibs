@@ -286,3 +286,18 @@ function getMonAndSun()
 	$SunDay=date('Y-m-d',strtotime("$MonDay +6 day"));
 	return [$MonDay,$SunDay];
 }
+
+
+/**
+ * 在一个数组中，发现那些重复的元素
+ * @param array $serialArr
+ */
+public function findRepeatValue($serialArr)
+{
+	//获取去掉重复数据的数组
+	$unique_arr = array_unique($serialArr);
+	//array_diff_assoc是比较所有的数组后，返回只在$serialArr中的元素，也就是重复的元素
+	$arr = array_diff_assoc ( $serialArr, $unique_arr );
+	//重复的数组里也可能有重复的元素
+	return array_unique($arr);
+}
