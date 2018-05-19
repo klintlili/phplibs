@@ -1070,7 +1070,6 @@ function switch_val_en_all($number)//传入编码GB2312编码的中文值，返�
 	    }
 	}
 	/*
- * face="\楷体_GB2312\"
  * face="\宋体\"
  * clear"=""
  * ke-zeroborder"=""
